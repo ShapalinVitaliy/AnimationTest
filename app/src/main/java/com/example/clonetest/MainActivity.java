@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         el1.setLayoutParams(params);
 
 
-        text.setText("Element 1");
+        text.setText("Down");
 
 
         ConstraintLayout el2 = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.fragment_elem, null);
         text = el2.findViewById(R.id.testing);
-        text.setText("Element 2");
+        text.setText("Up");
         el2.setLayoutParams(params);
 
         ConstraintLayout el3 = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.fragment_elem, null);
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             ConstraintLayout main = findViewById(R.id.main);
             ConstraintLayout elXchng = (ConstraintLayout) main.getChildAt(1);
 
+
             int[] w = new int[2];
             el3.getLocationInWindow(w);
             ValueAnimator valueAnimator = ValueAnimator.ofInt(250, w[1]-283);
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this, "Animation is done", Toast.LENGTH_SHORT).show();
                     el3.setVisibility(View.VISIBLE);
+                    main.removeView(elXchng);
                     super.onAnimationEnd(animation);
                 }
             });
