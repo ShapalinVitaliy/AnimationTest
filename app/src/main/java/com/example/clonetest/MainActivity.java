@@ -77,40 +77,21 @@ public class MainActivity extends AppCompatActivity {
         linear.addView(el5);
 
 
-        el3.setOnClickListener(v -> {
-            int [] q = new int [2];
-            el3.getLocationInWindow(q);
-            int e = 7;
 
-            ConstraintLayout elXchng = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.fragment_elem, null);
-            ConstraintLayout main = findViewById(R.id.main);
+        //el3.callOnClick();
 
-            ((TextView)(elXchng.findViewById(R.id.testing))).setText("Element 3");
-            //elXchng.setBackground(new ColorDrawable(getColor(R.color.exchng)));
-
-            ConstraintLayout.LayoutParams qwe = new ConstraintLayout.LayoutParams(width, height);
-            //qwe.setMargins(q[0], q[1]-283, 0, 0);
-
-            elXchng.setLayoutParams(qwe);
-
-            main.addView(elXchng);
+        //el3.setOnClickListener(v -> {
 
 
-            elXchng.setId(View.generateViewId());
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(main);
-            constraintSet.connect(elXchng.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
-            constraintSet.connect(elXchng.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.setMargin(elXchng.getId(), ConstraintSet.LEFT, q[0]);//q[0]);
-            constraintSet.setMargin(elXchng.getId(), ConstraintSet.TOP, q[1]-283);
-            constraintSet.applyTo(main);
-
-        } );
+        //} );
 
 
 
         el2.setOnClickListener(v -> {
 
+            el3Click(el3);
+
+            if (el3.getVisibility() == View.INVISIBLE) {return;}
             el3.setVisibility(View.INVISIBLE);
 
             ConstraintLayout main = findViewById(R.id.main);
@@ -145,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            valueAnimator = ValueAnimator.ofInt(elXchng.getWidth(), elXchng.getWidth()+30);
+            valueAnimator = ValueAnimator.ofInt(el3.getWidth(), el3.getWidth()+30);
             valueAnimator.setDuration(500);
             valueAnimator
                     .addUpdateListener(animation -> {
@@ -157,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             valueAnimator.start();
 
 
+            el3.setVisibility(View.INVISIBLE);
+
         });
 
 
@@ -166,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         el1.setOnClickListener(v -> {
 
-
+            if (el3.getVisibility() == View.VISIBLE) {return;}
 
             ConstraintLayout main = findViewById(R.id.main);
             ConstraintLayout elXchng = (ConstraintLayout) main.getChildAt(1);
@@ -212,9 +195,56 @@ public class MainActivity extends AppCompatActivity {
                     });
             valueAnimator.start();
 
+            valueAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    el3.setVisibility(View.VISIBLE);
+
+                    super.onAnimationCancel(animation);
+                }
+            });
+
 
         });
 
 
+    }
+
+    void el3Click(View el3)
+    {
+        int [] q = new int [2];
+        el3.getLocationInWindow(q);
+        int e = 7;
+
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+
+
+
+        ConstraintLayout elXchng = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.fragment_elem, null);
+        ConstraintLayout main = findViewById(R.id.main);
+
+        if (main.getChildCount() > 1) { return; }
+
+        ((TextView)(elXchng.findViewById(R.id.testing))).setText("Element 3");
+        //elXchng.setBackground(new ColorDrawable(getColor(R.color.exchng)));
+
+        ConstraintLayout.LayoutParams qwe = new ConstraintLayout.LayoutParams(width, height);
+        //qwe.setMargins(q[0], q[1]-283, 0, 0);
+
+        elXchng.setLayoutParams(qwe);
+
+        main.addView(elXchng);
+
+
+        elXchng.setId(View.generateViewId());
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(main);
+        constraintSet.connect(elXchng.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
+        constraintSet.connect(elXchng.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        constraintSet.setMargin(elXchng.getId(), ConstraintSet.LEFT, q[0]);//q[0]);
+        constraintSet.setMargin(elXchng.getId(), ConstraintSet.TOP, q[1]-283);
+        constraintSet.applyTo(main);
     }
 }
